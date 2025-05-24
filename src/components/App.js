@@ -1,24 +1,23 @@
-import React,{ useState, useEffect, useRef } from "react";
-import './../styles/App.css';
+import React, { useState, useEffect, useRef } from "react";
+import "./../styles/App.css";
 
 const App = () => {
-
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState([]);
   const intervalRef = useRef(null);
 
   const handleStart = () => {
-    if(!isRunning){
+    if (!isRunning) {
       setIsRunning(true);
-      intervalRef.current = setInterval(() =>{
+      intervalRef.current = setInterval(() => {
         setTime((prev) => prev + 1);
-      },10);
+      }, 10);
     }
   };
 
   const handleStop = () => {
-    if(intervalRef.current){
+    if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
@@ -26,7 +25,7 @@ const App = () => {
   };
 
   const handleLap = () => {
-    if (isRunning){
+    if (isRunning) {
       setLaps([...laps, time]);
     }
   };
@@ -43,15 +42,15 @@ const App = () => {
     };
   }, []);
 
-  const formatTime = (centiseconds) =>{
+  const padZero = (num) => (num < 10 ? `0${num}` : num);
+
+  const formatTime = (centiseconds) => {
     const minutes = Math.floor(centiseconds / 6000);
-    const seconds = Math.floor((centiseconds % 6000)/ 100);
+    const seconds = Math.floor((centiseconds % 6000) / 100);
     const cs = centiseconds % 100;
 
-    return `${padZero(minutes)}:${padZero(seconds)}.${padZero(cs)}`;
+    return `${padZero(minutes)}:${padZero(seconds)}:${padZero(cs)}`;
   };
-
-  const padZero = (num) => (num < 10 ? `0${num}` :num);
 
   return (
     <div className="App">
@@ -70,14 +69,13 @@ const App = () => {
         <button onClick={handleReset}>Reset</button>
       </div>
 
-      <div className="laps">
+      <ul className="laps">
         {laps.map((lapTime, index) => (
-          <div key={index}>Lap {index + 1}: {formatTime(lapTime)}</div>
+          <li key={index}>Lap {index + 1}: {formatTime(lapTime)}</li>
         ))}
-      </div>
-        {/* Do not remove the main div */}
+      </ul>
     </div>
   );
-}
+};
 
 export default App;
